@@ -1,14 +1,11 @@
 package ru.jeanponomarev.range;
 
-import java.util.Arrays;
-
 public class Range {
     private double from;
     private double to;
-    private static double epsilon = 1.0e-10;
 
     public Range(double from, double to) {
-        if (from - to > epsilon) {
+        if (from > to) {
             throw new IllegalArgumentException("Левая граница интервала должна быть меньше правой");
         }
 
@@ -24,67 +21,48 @@ public class Range {
         return to;
     }
 
-    public double getIntervalLength() {
-        return Math.abs(getTo() - getFrom());
+    public double getLength() {
+        return getTo() - getFrom();
     }
 
     public boolean isInside(double number) {
-        return number - getTo() < epsilon && number - getFrom() > -epsilon;
+        return number < getTo() && number > getFrom();
     }
 
-    public static Range getIntersectionInterval(Range range1, Range range2) {
-        if (range1.isInside(range2.getFrom()) && !range1.isInside(range2.getTo())) {
-            return new Range(range2.getFrom(), range1.getTo());
-        } else if (range1.isInside(range2.getFrom()) && range1.isInside(range2.getTo())) {
-            return new Range(range2.getFrom(), range2.getTo());
-        } else {
+    public Range getIntersection(Range range) {
+        try {
+            return new Range(Math.max(from, range.from), Math.min(to, range.to));
+        } catch (IllegalArgumentException e) {
             return null;
         }
     }
 
-    public static Range[] getUnionInterval(Range range1, Range range2) {
-        double leftBound;
-        double rightBound;
-
-        if (range1.isInside(range2.getFrom()) || range1.isInside(range2.getTo())) {
-            leftBound = Math.min(range1.getFrom(), range2.getFrom());
-            rightBound = Math.max(range1.getTo(), range2.getTo());
-
-            return new Range[]{new Range(leftBound, rightBound)};
-        }
-
-        if (range1.getFrom() < range2.getFrom()) {
-            return new Range[]{range1, range2};
+    public Range[] getUnion(Range range) {
+        if (getIntersection(range) == null) {
+            return new Range[]{new Range(from, to), new Range(range.from, range.to)};
         } else {
-            return new Range[]{range2, range1};
+            return new Range[]{new Range(Math.min(from, range.from), Math.max(to, range.to))};
         }
     }
 
-    public Range[] getResidualInterval(Range range) {
-        if (getFrom() < range.getFrom()) {
-            if (isInside(range.getFrom()) && !isInside(range.getTo())) {
-                return new Range[]{new Range(getFrom(), range.getFrom())};
-            } else if (isInside(range.getFrom()) && isInside(range.getTo())) {
-                return new Range[]{new Range(getFrom(), range.getFrom()), new Range(range.getTo(), getTo())};
+    public Range[] getResidual(Range range) {
+        if (from < range.from) {
+            if (range.to > to) {
+                return to >= range.from ? new Range[]{new Range(from, range.from)} : new Range[]{new Range(from, to)};
+            } else {
+                return new Range[]{new Range(from, range.from), new Range(range.to, to)};
             }
         } else {
-            if (isInside(range.getTo()) && !isInside(range.getFrom())) {
-                return new Range[]{new Range(range.getTo(), getTo())};
-            } else if (isInside(range.getTo()) && isInside(range.getFrom())) {
-                return new Range[]{new Range(getFrom(), range.getFrom()), new Range(range.getTo(), getTo())};
+            if (to > range.to) {
+                return range.to >= from ? new Range[]{new Range(range.to, to)} : new Range[]{new Range(from, to)};
+            } else {
+                return new Range[]{null};
             }
         }
-
-        return new Range[]{this};
     }
 
     @Override
     public String toString() {
-        double[] rangeArray = new double[2];
-
-        rangeArray[0] = getFrom();
-        rangeArray[1] = getTo();
-
-        return Arrays.toString(rangeArray);
+        return "[" + from + ", " + to + "]";
     }
 }
