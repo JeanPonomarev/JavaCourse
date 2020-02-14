@@ -22,23 +22,23 @@ public class Range {
     }
 
     public double getLength() {
-        return getTo() - getFrom();
+        return to - from;
     }
 
     public boolean isInside(double number) {
-        return number < getTo() && number > getFrom();
+        return number <= to && number >= from;
     }
 
     public Range getIntersection(Range range) {
-        try {
-            return new Range(Math.max(from, range.from), Math.min(to, range.to));
-        } catch (IllegalArgumentException e) {
+        if (to <= range.from || range.to <= from) {
             return null;
+        } else {
+            return new Range(Math.max(from, range.from), Math.min(to, range.to));
         }
     }
 
     public Range[] getUnion(Range range) {
-        if (getIntersection(range) == null) {
+        if (to < range.from || range.to < from) {
             return new Range[]{new Range(from, to), new Range(range.from, range.to)};
         } else {
             return new Range[]{new Range(Math.min(from, range.from), Math.max(to, range.to))};
@@ -47,16 +47,16 @@ public class Range {
 
     public Range[] getResidual(Range range) {
         if (from < range.from) {
-            if (range.to > to) {
-                return to >= range.from ? new Range[]{new Range(from, range.from)} : new Range[]{new Range(from, to)};
+            if (range.to >= to) {
+                return to > range.from ? new Range[]{new Range(from, range.from)} : new Range[]{new Range(from, to)};
             } else {
                 return new Range[]{new Range(from, range.from), new Range(range.to, to)};
             }
         } else {
             if (to > range.to) {
-                return range.to >= from ? new Range[]{new Range(range.to, to)} : new Range[]{new Range(from, to)};
+                return range.to > from ? new Range[]{new Range(range.to, to)} : new Range[]{new Range(from, to)};
             } else {
-                return new Range[]{null};
+                return new Range[]{};
             }
         }
     }

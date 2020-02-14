@@ -11,7 +11,7 @@ public class RangeTest {
         System.out.println("Длина интервала range = " + range.getLength());
         System.out.println();
 
-        double number = 1.6;
+        double number = 6.2;
         if (range.isInside(number)) {
             System.out.println("Данное число принадлежит интервалу range");
         } else {
@@ -23,7 +23,7 @@ public class RangeTest {
         Range range1 = new Range(0, 8);
         Range range2 = new Range(3, 5);
 
-        System.out.println("Пересечение интервалов range1 и range2: " + range1.getIntersection(range2).toString());
+        System.out.println("Пересечение интервалов range1 и range2: " + range1.getIntersection(range2));
         System.out.println();
 
         System.out.println("Объединение интервалов range1 и range2: " + Arrays.toString(range1.getUnion(range2)));
