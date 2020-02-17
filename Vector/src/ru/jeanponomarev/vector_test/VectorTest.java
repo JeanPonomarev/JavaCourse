@@ -36,10 +36,10 @@ public class VectorTest {
 
         System.out.println("Длина secondVector: " + secondVector.getLength());
 
-        System.out.println("Получение второй компоненты firstVector: " + firstVector.getComponentByIndex(1));
+        System.out.println("Получение второй компоненты firstVector: " + firstVector.getComponent(1));
 
         System.out.print("Установка первой компоненты firstVector на число 7: ");
-        firstVector.setComponentByIndex(0, 7);
+        firstVector.setComponent(0, 7);
         System.out.println(firstVector);
         System.out.println();
 
@@ -49,10 +49,10 @@ public class VectorTest {
 
         System.out.println("Статические методы:");
 
-        Vector firstResultVector = Vector.addVectors(firstVector, secondVector);
+        Vector firstResultVector = Vector.getVectorsSum(firstVector, secondVector);
         System.out.println("Сложение firstVector с secondVector с получением нового объекта: " + firstResultVector);
 
-        Vector secondResultVector = Vector.subtractVectors(firstVector, secondVector);
+        Vector secondResultVector = Vector.getVectorsDifference(firstVector, secondVector);
         System.out.println("Вычитание secondVector из firstVector с получением нового объекта: " + secondResultVector);
 
         System.out.println("Скалярное произведение firstResultVector и secondResultVector: " + Vector.getScalarProduct(firstResultVector, secondResultVector));
