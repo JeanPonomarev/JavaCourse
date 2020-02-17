@@ -1,6 +1,6 @@
-package ru.jeanponomarev.shapes.rectangle;
+package ru.jeanponomarev.shapes;
 
-import ru.jeanponomarev.shapes.Shape;
+import ru.jeanponomarev.Shape;
 
 public class Rectangle implements Shape {
     private double width;
@@ -47,15 +47,13 @@ public class Rectangle implements Shape {
             return true;
         }
 
-        if (obj == null || obj.getClass() != this.getClass()) {
+        if (obj == null || obj.getClass() != getClass()) {
             return false;
         }
 
         Rectangle comparedRectangle = (Rectangle) obj;
 
-        double epsilon = 1.0e-10;
-
-        return Math.abs(width - comparedRectangle.width) <= epsilon && Math.abs(height - comparedRectangle.height) <= epsilon;
+        return width == comparedRectangle.width && height == comparedRectangle.height;
     }
 
     @Override

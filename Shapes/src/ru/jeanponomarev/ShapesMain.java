@@ -1,12 +1,13 @@
-package ru.jeanponomarev.shapes;
+package ru.jeanponomarev;
 
-import ru.jeanponomarev.shapes.circle.Circle;
-import ru.jeanponomarev.shapes.rectangle.Rectangle;
-import ru.jeanponomarev.shapes.square.Square;
-import ru.jeanponomarev.shapes.triangle.Triangle;
+import ru.jeanponomarev.shapes.Circle;
+import ru.jeanponomarev.shapes.Rectangle;
+import ru.jeanponomarev.shapes_comparators.ShapesAreaComparator;
+import ru.jeanponomarev.shapes_comparators.ShapesPerimeterComparator;
+import ru.jeanponomarev.shapes.Square;
+import ru.jeanponomarev.shapes.Triangle;
 
 import java.util.Arrays;
-import java.util.Comparator;
 
 public class ShapesMain {
     public static void main(String[] args) {
@@ -30,28 +31,14 @@ public class ShapesMain {
     }
 
     public static Shape getLargestAreaShape(Shape[] shapesArray) {
-        Arrays.sort(shapesArray, new SortShapesByArea());
+        Arrays.sort(shapesArray, new ShapesAreaComparator());
 
         return shapesArray[shapesArray.length - 1];
     }
 
     public static Shape getSecondLargestPerimeterShape(Shape[] shapesArray) {
-        Arrays.sort(shapesArray, new SortShapesByPerimeter());
+        Arrays.sort(shapesArray, new ShapesPerimeterComparator());
 
         return shapesArray[shapesArray.length - 2];
-    }
-}
-
-class SortShapesByArea implements Comparator<Shape> {
-    @Override
-    public int compare(Shape firstShape, Shape secondShape) {
-        return Double.compare(firstShape.getArea(), secondShape.getArea());
-    }
-}
-
-class SortShapesByPerimeter implements Comparator<Shape> {
-    @Override
-    public int compare(Shape firstShape, Shape secondShape) {
-        return Double.compare(firstShape.getPerimeter(), secondShape.getPerimeter());
     }
 }

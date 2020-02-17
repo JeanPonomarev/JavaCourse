@@ -1,6 +1,6 @@
-package ru.jeanponomarev.shapes.circle;
+package ru.jeanponomarev.shapes;
 
-import ru.jeanponomarev.shapes.Shape;
+import ru.jeanponomarev.Shape;
 
 public class Circle implements Shape {
     private double radius;
@@ -36,7 +36,7 @@ public class Circle implements Shape {
     @Override
     public String toString() {
         return "Окружность" + System.lineSeparator() + "Радиус: " + radius
-                + System.lineSeparator() + "Площадь: " + getArea() + System.lineSeparator()+ "Периметр: " + getPerimeter();
+                + System.lineSeparator() + "Площадь: " + getArea() + System.lineSeparator() + "Периметр: " + getPerimeter();
     }
 
     @Override
@@ -45,15 +45,13 @@ public class Circle implements Shape {
             return true;
         }
 
-        if (obj == null || obj.getClass() != this.getClass()) {
+        if (obj == null || obj.getClass() != getClass()) {
             return false;
         }
 
         Circle comparedCircle = (Circle) obj;
 
-        double epsilon = 1.0e-10;
-
-        return Math.abs(radius - comparedCircle.radius) <= epsilon;
+        return radius == comparedCircle.radius;
     }
 
     @Override

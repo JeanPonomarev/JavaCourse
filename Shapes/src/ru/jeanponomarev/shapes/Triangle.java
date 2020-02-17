@@ -1,6 +1,6 @@
-package ru.jeanponomarev.shapes.triangle;
+package ru.jeanponomarev.shapes;
 
-import ru.jeanponomarev.shapes.Shape;
+import ru.jeanponomarev.Shape;
 
 public class Triangle implements Shape {
     private double x1;
@@ -12,10 +12,10 @@ public class Triangle implements Shape {
     private static final double EPSILON = 1.0e-10;
 
     public Triangle(double x1, double y1, double x2, double y2, double x3, double y3) {
-        double firstPartLineEquation = (x3 - x1) / (x2 - x1);
-        double secondPartLineEquation = (y3 - y1) / (y2 - y1);
+        double lineEquationPart1 = (x3 - x1) / (x2 - x1);
+        double lineEquationPart2 = (y3 - y1) / (y2 - y1);
 
-        if (Double.isNaN(firstPartLineEquation) || Double.isNaN(secondPartLineEquation) || Math.abs(firstPartLineEquation - secondPartLineEquation) <= EPSILON) {
+        if (Double.isNaN(lineEquationPart1) || Double.isNaN(lineEquationPart2) || Math.abs(lineEquationPart1 - lineEquationPart2) <= EPSILON) {
             throw new IllegalArgumentException("Заданные точки лежат на одной прямой");
         }
 
@@ -39,7 +39,7 @@ public class Triangle implements Shape {
 
     @Override
     public double getArea() {
-        double[] sidesLength = getSidesLength();
+        double[] sidesLength = getSidesLengths();
 
         double halfPerimeter = getPerimeter() / 2;
 
@@ -48,7 +48,7 @@ public class Triangle implements Shape {
 
     @Override
     public double getPerimeter() {
-        double[] sidesLength = getSidesLength();
+        double[] sidesLength = getSidesLengths();
 
         double perimeter = 0;
 
@@ -59,24 +59,28 @@ public class Triangle implements Shape {
         return perimeter;
     }
 
-    private double getMaximum(double coordinate1, double coordinate2, double coordinate3) {
+    private static double getMaximum(double coordinate1, double coordinate2, double coordinate3) {
         double maximum = Math.max(coordinate1, coordinate2);
         maximum = Math.max(maximum, coordinate3);
         return maximum;
     }
 
-    private double getMinimum(double coordinate1, double coordinate2, double coordinate3) {
+    private static double getMinimum(double coordinate1, double coordinate2, double coordinate3) {
         double minimum = Math.min(coordinate1, coordinate2);
         minimum = Math.min(minimum, coordinate3);
         return minimum;
     }
 
-    private double[] getSidesLength() {
-        double firstSideLength = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
-        double secondSideLength = Math.sqrt(Math.pow(x1 - x3, 2) + Math.pow(y1 - y3, 2));
-        double thirdSideLength = Math.sqrt(Math.pow(x2 - x3, 2) + Math.pow(y2 - y3, 2));
+    private double[] getSidesLengths() {
+        double sideLength1 = getSideLength(x1, x2, y1, y2);
+        double sideLength2 = getSideLength(x1, x3, y1, y3);
+        double sideLength3 = getSideLength(x2, x3, y2, y3);
 
-        return new double[]{firstSideLength, secondSideLength, thirdSideLength};
+        return new double[]{sideLength1, sideLength2, sideLength3};
+    }
+
+    private double getSideLength(double x1, double x2, double y1, double y2) {
+        return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
     }
 
     @Override
@@ -92,15 +96,14 @@ public class Triangle implements Shape {
             return true;
         }
 
-        if (obj == null || obj.getClass() != this.getClass()) {
+        if (obj == null || obj.getClass() != getClass()) {
             return false;
         }
 
         Triangle comparedTriangle = (Triangle) obj;
 
-        return Math.abs(x1 - comparedTriangle.x1) <= EPSILON && Math.abs(y1 - comparedTriangle.y1) <= EPSILON
-                && Math.abs(x2 - comparedTriangle.x2) <= EPSILON && Math.abs(y2 - comparedTriangle.y2) <= EPSILON
-                && Math.abs(x3 - comparedTriangle.x3) <= EPSILON && Math.abs(y3 - comparedTriangle.y3) <= EPSILON;
+        return x1 == comparedTriangle.x1 && y1 == comparedTriangle.y1 && x2 == comparedTriangle.x2
+                && y2 == comparedTriangle.y2 && x3 == comparedTriangle.x3 && y3 == comparedTriangle.y3;
     }
 
     @Override

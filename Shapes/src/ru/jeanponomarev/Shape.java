@@ -1,4 +1,4 @@
-package ru.jeanponomarev.shapes;
+package ru.jeanponomarev;
 
 public interface Shape {
     double getWidth();
