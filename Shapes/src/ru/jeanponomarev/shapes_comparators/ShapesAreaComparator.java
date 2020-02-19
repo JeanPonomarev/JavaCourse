@@ -1,6 +1,6 @@
 package ru.jeanponomarev.shapes_comparators;
 
-import ru.jeanponomarev.Shape;
+import ru.jeanponomarev.shape_interface.Shape;
 
 import java.util.Comparator;
 

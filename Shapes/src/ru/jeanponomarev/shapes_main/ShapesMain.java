@@ -1,5 +1,6 @@
-package ru.jeanponomarev;
+package ru.jeanponomarev.shapes_main;
 
+import ru.jeanponomarev.shape_interface.Shape;
 import ru.jeanponomarev.shapes.Circle;
 import ru.jeanponomarev.shapes.Rectangle;
 import ru.jeanponomarev.shapes_comparators.ShapesAreaComparator;
@@ -11,19 +12,9 @@ import java.util.Arrays;
 
 public class ShapesMain {
     public static void main(String[] args) {
-        Shape[] shapesArray = new Shape[8];
-
-        shapesArray[0] = new Square(2);
-        shapesArray[1] = new Square(4);
-
-        shapesArray[2] = new Triangle(1, 1, 5, 1, 5, 5);
-        shapesArray[3] = new Triangle(0, 0, 7, 0, 7, 5);
-
-        shapesArray[4] = new Rectangle(5, 2);
-        shapesArray[5] = new Rectangle(3, 1);
-
-        shapesArray[6] = new Circle(4);
-        shapesArray[7] = new Circle(7);
+        Shape[] shapesArray = {new Square(2), new Square(4), new Triangle(1, 1, 5, 1, 5, 5),
+                new Triangle(0, 0, 7, 0, 7, 5), new Rectangle(5, 2),
+                new Rectangle(3, 1), new Circle(4), new Circle(7)};
 
         System.out.println(getLargestAreaShape(shapesArray));
         System.out.println();

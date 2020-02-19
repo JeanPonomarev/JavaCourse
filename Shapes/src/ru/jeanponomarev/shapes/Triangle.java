@@ -1,6 +1,6 @@
 package ru.jeanponomarev.shapes;
 
-import ru.jeanponomarev.Shape;
+import ru.jeanponomarev.shape_interface.Shape;
 
 public class Triangle implements Shape {
     private double x1;
@@ -60,32 +60,28 @@ public class Triangle implements Shape {
     }
 
     private static double getMaximum(double coordinate1, double coordinate2, double coordinate3) {
-        double maximum = Math.max(coordinate1, coordinate2);
-        maximum = Math.max(maximum, coordinate3);
-        return maximum;
+        return Math.max(Math.max(coordinate1, coordinate2), coordinate3);
     }
 
     private static double getMinimum(double coordinate1, double coordinate2, double coordinate3) {
-        double minimum = Math.min(coordinate1, coordinate2);
-        minimum = Math.min(minimum, coordinate3);
-        return minimum;
+        return Math.min(Math.min(coordinate1, coordinate2), coordinate3);
     }
 
     private double[] getSidesLengths() {
-        double sideLength1 = getSideLength(x1, x2, y1, y2);
-        double sideLength2 = getSideLength(x1, x3, y1, y3);
-        double sideLength3 = getSideLength(x2, x3, y2, y3);
+        double sideLength1 = getSideLength(x1, y1, x2, y2);
+        double sideLength2 = getSideLength(x1, y1, x3, y3);
+        double sideLength3 = getSideLength(x2, y2, x3, y3);
 
         return new double[]{sideLength1, sideLength2, sideLength3};
     }
 
-    private double getSideLength(double x1, double x2, double y1, double y2) {
+    private static double getSideLength(double x1, double y1, double x2, double y2) {
         return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
     }
 
     @Override
     public String toString() {
-        return "Треугольник" + System.lineSeparator() + "Координаты вершин: [" + x1 + ", " + y1 + "], [" + x2 + ", " + y2 + "], [" + x2 + ", " + y2 + "]"
+        return "Треугольник" + System.lineSeparator() + "Координаты вершин: [" + x1 + ", " + y1 + "], [" + x2 + ", " + y2 + "], [" + x3 + ", " + y3 + "]"
                 + System.lineSeparator() + "Ширина: " + getWidth() + System.lineSeparator() + "Высота: " + getHeight()
                 + System.lineSeparator() + "Площадь: " + getArea() + System.lineSeparator() + "Периметр: " + getPerimeter();
     }

@@ -1,6 +1,6 @@
 package ru.jeanponomarev.shapes;
 
-import ru.jeanponomarev.Shape;
+import ru.jeanponomarev.shape_interface.Shape;
 
 public class Rectangle implements Shape {
     private double width;

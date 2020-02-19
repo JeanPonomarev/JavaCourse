@@ -5,12 +5,12 @@ import java.util.Arrays;
 public class Vector {
     private double[] components;
 
-    public Vector(int n) {
-        if (n <= 0) {
+    public Vector(int dimension) {
+        if (dimension <= 0) {
             throw new IllegalArgumentException("Размерность вектора не может быть меньше либо равна нулю");
         }
 
-        components = new double[n];
+        components = new double[dimension];
     }
 
     public Vector(Vector vector) {
@@ -19,26 +19,18 @@ public class Vector {
 
     public Vector(double[] components) {
         if (components.length == 0) {
-            throw new IllegalArgumentException("Размерность вектора не может быть меньше либо равна нулю");
+            throw new IllegalArgumentException("Размерность вектора не может быть равна нулю");
         }
 
         this.components = Arrays.copyOf(components, components.length);
-
-        if (getLength() == 0) {
-            throw new IllegalArgumentException("Нельзя создавать вектор длины 0");
-        }
     }
 
-    public Vector(int n, double[] components) {
-        if (n <= 0) {
+    public Vector(int dimension, double[] components) {
+        if (dimension <= 0) {
             throw new IllegalArgumentException("Размерность вектора не может быть меньше либо равна нулю");
         }
 
-        this.components = Arrays.copyOf(components, n);
-
-        if (getLength() == 0) {
-            throw new IllegalArgumentException("Нельзя создавать вектор длины 0");
-        }
+        this.components = Arrays.copyOf(components, dimension);
     }
 
     public int getSize() {
@@ -93,33 +85,29 @@ public class Vector {
         components[index] = newComponent;
     }
 
-    public static Vector getVectorsSum(Vector firstVector, Vector secondVector) {
-        firstVector.add(secondVector);
+    public static Vector getVectorsSum(Vector vector1, Vector vector2) {
+        Vector resultVector = new Vector(vector1);
 
-        Vector resultVector = new Vector(firstVector);
-
-        firstVector.subtract(secondVector);
+        resultVector.add(vector2);
 
         return resultVector;
     }
 
-    public static Vector getVectorsDifference(Vector firstVector, Vector secondVector) {
-        firstVector.subtract(secondVector);
+    public static Vector getVectorsDifference(Vector vector1, Vector vector2) {
+        Vector resultVector = new Vector(vector1);
 
-        Vector resultVector = new Vector(firstVector);
-
-        firstVector.add(secondVector);
+        resultVector.subtract(vector2);
 
         return resultVector;
     }
 
-    public static double getScalarProduct(Vector firstVector, Vector secondVector) {
+    public static double getScalarProduct(Vector vector1, Vector vector2) {
         double scalarProduct = 0;
 
-        int minComponentsLength = Math.min(firstVector.components.length, secondVector.components.length);
+        int minComponentsLength = Math.min(vector1.components.length, vector2.components.length);
 
         for (int i = 0; i < minComponentsLength; i++) {
-            scalarProduct += firstVector.components[i] * secondVector.components[i];
+            scalarProduct += vector1.components[i] * vector2.components[i];
         }
 
         return scalarProduct;
