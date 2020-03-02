@@ -1,10 +1,9 @@
-package ru.jeanponomarev;
+package ru.jeanponomarev.list;
 
 public class SinglyLinkedList<T> {
     private ListItem<T> head;
     private int count;
 
-    // делаем конструктор для тестов
     public SinglyLinkedList(T[] dataArray) {
         if (dataArray.length == 0) {
             head = null;
@@ -12,14 +11,14 @@ public class SinglyLinkedList<T> {
             return;
         }
 
-        head = new ListItem<T>(dataArray[0]);
+        head = new ListItem<>(dataArray[0]);
         count = dataArray.length;
 
         ListItem<T> previousItem = head;
         ListItem<T> newItem;
 
         for (int i = 1; i < dataArray.length; i++) {
-            newItem = new ListItem<T>(dataArray[i]);
+            newItem = new ListItem<>(dataArray[i]);
 
             previousItem.setNext(newItem);
             previousItem = newItem;
@@ -38,7 +37,7 @@ public class SinglyLinkedList<T> {
         return head.getData();
     }
 
-    public T getData(int index) { // получение значения по индексу
+    public T getData(int index) {
         if (head == null) {
             throw new NullPointerException("Список пуст");
         }
@@ -60,7 +59,7 @@ public class SinglyLinkedList<T> {
         return requestedItem.getData();
     }
 
-    public T setData(int index, T newData) { // изменение значения по индексу
+    public T setData(int index, T newData) {
         if (head == null) {
             throw new NullPointerException("Список пуст");
         }
@@ -90,7 +89,7 @@ public class SinglyLinkedList<T> {
         return oldData;
     }
 
-    public T removeItemByIndex(int index) { // удаление элемента по индексу
+    public T removeItemByIndex(int index) {
         if (head == null) {
             throw new NullPointerException("Список пуст");
         }
@@ -128,7 +127,7 @@ public class SinglyLinkedList<T> {
         return removedData;
     }
 
-    public void add(ListItem<T> item) { // вставка элемента в начало
+    public void add(ListItem<T> item) {
         if (head != null) {
             item.setNext(head);
         }
@@ -137,7 +136,7 @@ public class SinglyLinkedList<T> {
         ++count;
     }
 
-    public void add(T data) { // вставка элемента в начало
+    public void add(T data) {
         ListItem<T> item = new ListItem<>(data);
 
         if (head != null) {
@@ -148,7 +147,7 @@ public class SinglyLinkedList<T> {
         ++count;
     }
 
-    public void add(int index, T data) { // вставка элемента по индексу
+    public void add(int index, T data) {
         if (index > count || index < 0) {
             throw new IllegalArgumentException("Указанный индекс лежит вне диапазона списка");
         }
@@ -249,6 +248,7 @@ public class SinglyLinkedList<T> {
 
         ListItem<T> currentItem = head.getNext();
         ListItem<T> previousItem = head;
+        head.setNext(null);
 
         for (int i = 1; i < count; i++) {
             head = currentItem;
@@ -260,10 +260,10 @@ public class SinglyLinkedList<T> {
             previousItem = head;
         }
 
-        this.head = previousItem;
+        head = previousItem;
     }
 
-    public SinglyLinkedList<T> getListCopy() {
+    public SinglyLinkedList<T> getCopy() {
         SinglyLinkedList<T> listCopy = new SinglyLinkedList<>();
 
         for (int i = count - 1; i >= 0; i--) {
@@ -271,5 +271,21 @@ public class SinglyLinkedList<T> {
         }
 
         return listCopy;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append("[");
+
+        for (ListItem<T> p = head; p != null; p = p.getNext()) {
+            stringBuilder.append(p.getData()).append(", ");
+        }
+
+        stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length());
+        stringBuilder.append("]");
+
+        return stringBuilder.toString();
     }
 }

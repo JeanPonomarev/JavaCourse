@@ -1,4 +1,4 @@
-package ru.jeanponomarev;
+package ru.jeanponomarev.list;
 
 public class ListItem<T> {
     private T data;
@@ -18,7 +18,7 @@ public class ListItem<T> {
     }
 
     public T getData() {
-        return  data;
+        return data;
     }
 
     public ListItem<T> getNext() {
