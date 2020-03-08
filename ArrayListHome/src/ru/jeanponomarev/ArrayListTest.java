@@ -13,35 +13,25 @@ public class ArrayListTest {
 
         ArrayList<String> fileStrings = getAllFileStrings(fileName);
 
-        for (String line : fileStrings) {
-            System.out.println(line);
-        }
-
-        System.out.println();
+        System.out.println(fileStrings);
 
         ArrayList<Integer> numbers1 = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10));
 
         for (int i = 0; i < numbers1.size(); ) {
             if (numbers1.get(i) % 2 == 0) {
-                numbers1.remove(numbers1.get(i));
+                numbers1.remove(i);
             } else {
                 ++i;
             }
         }
 
-        for (Integer number : numbers1) {
-            System.out.print(number + " ");
-        }
-
-        System.out.println(System.lineSeparator());
+        System.out.println(numbers1);
 
         ArrayList<Integer> numbers2 = new ArrayList<>(Arrays.asList(1, 5, 2, 1, 3, 5));
 
         ArrayList<Integer> uniqueNumbers = getUniqueElements(numbers2);
 
-        for (Integer number : uniqueNumbers) {
-            System.out.print(number + " ");
-        }
+        System.out.println(uniqueNumbers);
     }
 
     private static ArrayList<String> getAllFileStrings(String fileName) {
