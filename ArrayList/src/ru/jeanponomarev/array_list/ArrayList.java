@@ -41,13 +41,12 @@ public class ArrayList<T> implements List<T> {
     public ArrayList() {
         //noinspection unchecked
         items = (T[]) new Object[10];
-        size = 0;
     }
 
     // конструктор для массива
     public ArrayList(T[] dataArray) {
         items = Arrays.copyOf(dataArray, dataArray.length + 10);
-        size = items.length;
+        size = dataArray.length;
     }
 
     // конструктор для List
@@ -65,7 +64,6 @@ public class ArrayList<T> implements List<T> {
     public ArrayList(int capacity) {
         //noinspection unchecked
         items = (T[]) new Object[capacity];
-        size = capacity;
     }
 
     @Override
@@ -128,6 +126,16 @@ public class ArrayList<T> implements List<T> {
 
     private void increaseCapacity() {
         items = Arrays.copyOf(items, items.length * 2);
+    }
+
+    public void ensureCapacity(int capacity) {
+        if (capacity > size) {
+            items = Arrays.copyOf(items, capacity);
+        }
+    }
+
+    public void trimToSize() {
+        items = Arrays.copyOf(items, size);
     }
 
     @Override
@@ -194,7 +202,24 @@ public class ArrayList<T> implements List<T> {
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        return false;
+        ArrayList<Object> newList = new ArrayList<>(size);
+
+        for (Object element : c) {
+            if (contains(element) & !newList.contains(element)) {
+                newList.add(element);
+            }
+        }
+
+        size = newList.size;
+
+        for (int i = size - 1, j = 0; i >= 0; i--, j++) {
+            //noinspection unchecked
+            items[j] = (T) newList.items[i];
+
+            ++modCount;
+        }
+
+        return true;
     }
 
     @Override
@@ -289,6 +314,10 @@ public class ArrayList<T> implements List<T> {
 
     @Override
     public String toString() {
+        if (size == 0) {
+            return "[]";
+        }
+
         StringBuilder stringBuilder = new StringBuilder("[");
 
         for (int i = 0; i < size; i++) {
