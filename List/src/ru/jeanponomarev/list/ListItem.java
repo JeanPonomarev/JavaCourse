@@ -13,10 +13,6 @@ public class ListItem<T> {
         this.next = next;
     }
 
-    public ListItem() {
-
-    }
-
     public T getData() {
         return data;
     }

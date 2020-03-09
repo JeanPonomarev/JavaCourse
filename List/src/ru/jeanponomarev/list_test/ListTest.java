@@ -29,9 +29,15 @@ public class ListTest {
 
         System.out.println("Удаление первого элемента (" + list.removeFirstItem() + "): " + list);
 
-        list.reverseList();
+        list.reverse();
         System.out.println("Разворот списка: " + list);
 
         System.out.println("Получение копии списка: " + list.getCopy());
+
+        /*System.out.println(list.getSize());
+
+        for (int i = 0; i < list.getSize(); i++) {
+            System.out.print(list.getData(i) + " ");
+        }*/
     }
 }
