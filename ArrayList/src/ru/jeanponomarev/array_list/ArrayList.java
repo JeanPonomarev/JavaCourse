@@ -36,20 +36,16 @@ public class ArrayList<T> implements List<T> {
         }
     }
 
-    // конструкторы
-    // пустой конструктор
     public ArrayList() {
         //noinspection unchecked
         items = (T[]) new Object[10];
     }
 
-    // конструктор для массива
     public ArrayList(T[] dataArray) {
         items = Arrays.copyOf(dataArray, dataArray.length + 10);
         size = dataArray.length;
     }
 
-    // конструктор для List
     public ArrayList(List<T> list) {
         //noinspection unchecked
         items = (T[]) new Object[list.size() + 10];
@@ -60,7 +56,6 @@ public class ArrayList<T> implements List<T> {
         }
     }
 
-    // конструктор со вместимостью
     public ArrayList(int capacity) {
         //noinspection unchecked
         items = (T[]) new Object[capacity];
@@ -202,21 +197,17 @@ public class ArrayList<T> implements List<T> {
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        ArrayList<Object> newList = new ArrayList<>(size);
-
-        for (Object element : c) {
-            if (contains(element) & !newList.contains(element)) {
-                newList.add(element);
+        outerLoop:
+        for (int i = 0; i < size; ) {
+            for (Object element : c) {
+                //noinspection unchecked
+                if (items[i].equals((T) element)) {
+                    ++i;
+                    continue outerLoop;
+                }
             }
-        }
 
-        size = newList.size;
-
-        for (int i = size - 1, j = 0; i >= 0; i--, j++) {
-            //noinspection unchecked
-            items[j] = (T) newList.items[i];
-
-            ++modCount;
+            remove(i);
         }
 
         return true;
@@ -330,7 +321,6 @@ public class ArrayList<T> implements List<T> {
         return stringBuilder.toString();
     }
 
-    // Не реализовывать эти методы
     @Override
     public ListIterator<T> listIterator() {
         return null;
