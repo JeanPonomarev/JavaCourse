@@ -19,6 +19,6 @@ public class Person {
 
     @Override
     public String toString() {
-        return getName() + " : " + getAge();
+        return name + " : " + age;
     }
 }
