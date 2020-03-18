@@ -4,7 +4,7 @@ import ru.jeanponomarev.list.SinglyLinkedList;
 
 public class ListTest {
     public static void main(String[] args) {
-        Integer[] array = {5, 3, 2, 7, 9, 4};
+        Integer[] array = {5, 3, 2, 7, null, 9, 4};
 
         SinglyLinkedList<Integer> list = new SinglyLinkedList<>(array);
 
@@ -18,7 +18,7 @@ public class ListTest {
 
         System.out.println("Удаление пятого элемента (" + list.removeItemByIndex(4) + "): " + list);
 
-        list.add(10);
+        list.addFirstElement(10);
         System.out.println("Вставка 10 в начало списка: " + list);
 
         list.add(4, 9);

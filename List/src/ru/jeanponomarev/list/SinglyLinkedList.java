@@ -26,7 +26,7 @@ public class SinglyLinkedList<T> {
     }
 
     public SinglyLinkedList() {
-        count = 0;
+
     }
 
     public int getSize() {
@@ -46,14 +46,10 @@ public class SinglyLinkedList<T> {
             throw new IndexOutOfBoundsException("Указанный индекс лежит вне диапазона списка");
         }
 
-        if (index == 0) {
-            return head.getData();
-        }
-
-        return getRequestedItem(index).getData();
+        return getItem(index).getData();
     }
 
-    private ListItem<T> getRequestedItem(int index) {
+    private ListItem<T> getItem(int index) {
         ListItem<T> requestedItem = head;
 
         for (int i = 0; i < index; i++) {
@@ -68,18 +64,8 @@ public class SinglyLinkedList<T> {
             throw new IndexOutOfBoundsException("Указанный индекс лежит вне диапазона списка");
         }
 
-        T oldData;
-
-        if (index == 0) {
-            oldData = head.getData();
-            head.setData(newData);
-
-            return oldData;
-        }
-
-        ListItem<T> requestedItem = getRequestedItem(index);
-
-        oldData = requestedItem.getData();
+        ListItem<T> requestedItem = getItem(index);
+        T oldData = requestedItem.getData();
         requestedItem.setData(newData);
 
         return oldData;
@@ -90,28 +76,23 @@ public class SinglyLinkedList<T> {
             throw new IndexOutOfBoundsException("Указанный индекс лежит вне диапазона списка");
         }
 
-        T removedData;
-
         if (index == 0) {
-            removedData = head.getData();
+            T removedData = head.getData();
             head = head.getNext();
             --count;
 
             return removedData;
         }
 
-        ListItem<T> requestedItem = getRequestedItem(index - 1);
-
-        removedData = requestedItem.getNext().getData();
-
+        ListItem<T> requestedItem = getItem(index - 1);
+        T removedData = requestedItem.getNext().getData();
         requestedItem.setNext(requestedItem.getNext().getNext());
-
         --count;
 
         return removedData;
     }
 
-    public void add(T data) {
+    public void addFirstElement(T data) {
         ListItem<T> item = new ListItem<>(data);
 
         item.setNext(head);
@@ -125,61 +106,45 @@ public class SinglyLinkedList<T> {
             throw new IndexOutOfBoundsException("Указанный индекс лежит вне диапазона списка");
         }
 
-        ListItem<T> newItem = new ListItem<>(data);
-
         if (index == 0) {
-            add(data);
+            addFirstElement(data);
 
             return;
         }
 
-        ListItem<T> shiftedItem = head;
-        ListItem<T> previousItem = null;
+        ListItem<T> newItem = new ListItem<>(data);
 
-        for (int i = 0; i < index; i++) {
-            previousItem = shiftedItem;
-            shiftedItem = shiftedItem.getNext();
-        }
-
-        previousItem.setNext(newItem);
-
-        if (shiftedItem != null) {
-            newItem.setNext(shiftedItem);
-        }
+        ListItem<T> previous = getItem(index - 1);
+        newItem.setNext(previous.getNext());
+        previous.setNext(newItem);
 
         ++count;
     }
 
     public boolean removeItemByData(T data) {
-        if (head == null) {
+        if (count == 0) {
             return false;
         }
 
         ListItem<T> currentItem = head;
         ListItem<T> previousItem = null;
 
-        boolean isFound = false;
-
         while (currentItem != null) {
-            if (currentItem.getData().equals(data)) {
-                isFound = true;
-                break;
+            //noinspection ConstantConditions
+            if ((currentItem.getData() == null && data == null) || currentItem.getData().equals(data)) {
+                if (previousItem == null) {
+                    head = currentItem.getNext();
+                } else {
+                    previousItem.setNext(currentItem.getNext());
+                }
+
+                --count;
+
+                return true;
             }
 
             previousItem = currentItem;
             currentItem = currentItem.getNext();
-        }
-
-        if (isFound) {
-            if (previousItem == null) {
-                head = currentItem.getNext();
-            } else {
-                previousItem.setNext(currentItem.getNext());
-            }
-
-            --count;
-
-            return true;
         }
 
         return false;
@@ -191,9 +156,7 @@ public class SinglyLinkedList<T> {
         }
 
         T removedItem = head.getData();
-
         head = head.getNext();
-
         --count;
 
         return removedItem;
@@ -210,11 +173,8 @@ public class SinglyLinkedList<T> {
 
         for (int i = 1; i < count; i++) {
             head = currentItem;
-
             currentItem = currentItem.getNext();
-
             head.setNext(previousItem);
-
             previousItem = head;
         }
 
@@ -228,7 +188,7 @@ public class SinglyLinkedList<T> {
             return listCopy;
         }
 
-        listCopy.add(getHead());
+        listCopy.addFirstElement(getHead());
 
         ListItem<T> currentItem = head.getNext();
         ListItem<T> currentCopiedItem = listCopy.head;
