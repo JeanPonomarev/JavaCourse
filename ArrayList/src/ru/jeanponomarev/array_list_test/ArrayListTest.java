@@ -1,7 +1,9 @@
-package ru.jeanponomarev.array_list;
+package ru.jeanponomarev.array_list_test;
 
-import java.util.Arrays;
-import java.util.HashSet;
+import ru.jeanponomarev.array_list.ArrayList;
+
+import javax.print.attribute.IntegerSyntax;
+import java.util.*;
 
 public class ArrayListTest {
     public static void main(String[] args) {
@@ -11,7 +13,7 @@ public class ArrayListTest {
         System.out.println("Изначальная длина списка: " + list.size());
         System.out.println();
 
-        System.out.println("Список содерит 9: " + list.contains(9));
+        System.out.println("Список содержит 9: " + list.contains(9));
         System.out.println();
 
         Integer[] listArray = list.toArray(new Integer[0]);
