@@ -1,6 +1,7 @@
 package ru.jeanponomarev.list;
 
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 public class SinglyLinkedList<T> {
     private ListItem<T> head;
@@ -15,10 +16,9 @@ public class SinglyLinkedList<T> {
         count = dataArray.length;
 
         ListItem<T> previousItem = head;
-        ListItem<T> newItem;
 
         for (int i = 1; i < dataArray.length; i++) {
-            newItem = new ListItem<>(dataArray[i]);
+            ListItem<T> newItem = new ListItem<>(dataArray[i]);
 
             previousItem.setNext(newItem);
             previousItem = newItem;
@@ -77,16 +77,12 @@ public class SinglyLinkedList<T> {
         }
 
         if (index == 0) {
-            T removedData = head.getData();
-            head = head.getNext();
-            --count;
-
-            return removedData;
+            return removeFirstItem();
         }
 
-        ListItem<T> requestedItem = getItem(index - 1);
-        T removedData = requestedItem.getNext().getData();
-        requestedItem.setNext(requestedItem.getNext().getNext());
+        ListItem<T> previousItem = getItem(index - 1);
+        T removedData = previousItem.getNext().getData();
+        previousItem.setNext(previousItem.getNext().getNext());
         --count;
 
         return removedData;
@@ -114,9 +110,9 @@ public class SinglyLinkedList<T> {
 
         ListItem<T> newItem = new ListItem<>(data);
 
-        ListItem<T> previous = getItem(index - 1);
-        newItem.setNext(previous.getNext());
-        previous.setNext(newItem);
+        ListItem<T> previousItem = getItem(index - 1);
+        newItem.setNext(previousItem.getNext());
+        previousItem.setNext(newItem);
 
         ++count;
     }
@@ -130,8 +126,7 @@ public class SinglyLinkedList<T> {
         ListItem<T> previousItem = null;
 
         while (currentItem != null) {
-            //noinspection ConstantConditions
-            if ((currentItem.getData() == null && data == null) || currentItem.getData().equals(data)) {
+            if (Objects.equals(currentItem.getData(), data)) {
                 if (previousItem == null) {
                     head = currentItem.getNext();
                 } else {
