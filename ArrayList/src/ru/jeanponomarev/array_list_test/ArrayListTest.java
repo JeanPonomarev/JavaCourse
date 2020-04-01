@@ -2,8 +2,8 @@ package ru.jeanponomarev.array_list_test;
 
 import ru.jeanponomarev.array_list.ArrayList;
 
-import javax.print.attribute.IntegerSyntax;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
 
 public class ArrayListTest {
     public static void main(String[] args) {
@@ -52,6 +52,6 @@ public class ArrayListTest {
 
         ArrayList<Integer> retainedList = new ArrayList<>(Arrays.asList(10, 7));
         list.retainAll(retainedList);
-        System.out.println("Удаление из списка всех элементов, которые не содержаться с списке retainedList (10, 7): " + list);
+        System.out.println("Удаление из списка всех элементов, которые не содержатся с списке retainedList (10, 7): " + list);
     }
 }

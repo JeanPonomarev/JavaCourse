@@ -18,7 +18,7 @@ public class ArrayList<T> implements List<T> {
 
         @Override
         public T next() {
-            if (currentIndex == size - 1) {
+            if (!hasNext()) {
                 throw new NoSuchElementException("Выход за границы коллекции, возвращено null");
             }
 
@@ -49,7 +49,8 @@ public class ArrayList<T> implements List<T> {
 
         int i = 0;
         for (T element : list) {
-            items[i++] = element;
+            items[i] = element;
+            i++;
         }
     }
 
@@ -94,8 +95,14 @@ public class ArrayList<T> implements List<T> {
             return (T1[]) Arrays.copyOf(items, size, a.getClass());
         }
 
-        //noinspection unchecked
-        a = (T1[]) Arrays.copyOf(items, a.length, a.getClass());
+        for (int i = 0; i < size; i++) {
+            //noinspection unchecked
+            a[i] = (T1) items[i];
+        }
+
+        if (a.length > size) {
+            a[size] = null;
+        }
 
         return a;
     }
@@ -116,7 +123,7 @@ public class ArrayList<T> implements List<T> {
 
     private void increaseCapacity() {
         if (size == 0) {
-            items = Arrays.copyOf(items, 1);
+            items = Arrays.copyOf(items, 10);
         } else {
             items = Arrays.copyOf(items, items.length * 2);
         }
@@ -139,10 +146,7 @@ public class ArrayList<T> implements List<T> {
         int index = indexOf(o);
 
         if (index != -1) {
-            System.arraycopy(items, index + 1, items, index, size - index - 1);
-
-            --size;
-            ++modCount;
+            remove(index);
         }
 
         return index != -1;
@@ -161,20 +165,7 @@ public class ArrayList<T> implements List<T> {
 
     @Override
     public boolean addAll(Collection<? extends T> c) {
-        if (items.length < size + c.size()) {
-            items = Arrays.copyOf(items, size + c.size());
-        }
-
-        int i = size;
-        for (T element : c) {
-            items[i] = element;
-            i++;
-
-            ++size;
-            ++modCount;
-        }
-
-        return true;
+        return addAll(size, c);
     }
 
     @Override
@@ -183,16 +174,23 @@ public class ArrayList<T> implements List<T> {
             throw new IndexOutOfBoundsException("Индекс лежит за пределами списка");
         }
 
-        if (items.length < size + c.size()) {
-            items = Arrays.copyOf(items, size + c.size());
+        if (c.isEmpty()) {
+            return false;
         }
 
-        int i = index;
-        int k = size;
-        for (T element : c) {
-            items[k++] = items[i];
-            items[i++] = element;
+        if (items.length < size + c.size()) {
+            ensureCapacity(size + c.size());
         }
+
+        if (index != size) {
+            System.arraycopy(items, index, items, index + c.size(), size - index);
+        }
+
+        //noinspection unchecked
+        System.arraycopy(c.toArray((T[]) new Object[]{}), 0, items, index, c.size());
+
+        size += c.size();
+        ++modCount;
 
         return true;
     }
@@ -260,8 +258,6 @@ public class ArrayList<T> implements List<T> {
 
         items[index] = element;
 
-        ++modCount;
-
         return replacedItem;
     }
 
@@ -303,18 +299,8 @@ public class ArrayList<T> implements List<T> {
 
     @Override
     public int indexOf(Object o) {
-        if (o == null) {
-            for (int i = 0; i < size; i++) {
-                if (items[i] == null) {
-                    return i;
-                }
-            }
-
-            return -1;
-        }
-
         for (int i = 0; i < size; i++) {
-            if (o.equals(items[i])) {
+            if (Objects.equals(items[i], o)) {
                 return i;
             }
         }
@@ -324,18 +310,8 @@ public class ArrayList<T> implements List<T> {
 
     @Override
     public int lastIndexOf(Object o) {
-        if (o == null) {
-            for (int i = size - 1; i >= 0; i--) {
-                if (items[i] == null) {
-                    return i;
-                }
-            }
-
-            return -1;
-        }
-
         for (int i = size - 1; i >= 0; i--) {
-            if (o.equals(items[i])) {
+            if (Objects.equals(items[i], o)) {
                 return i;
             }
         }
