@@ -1,6 +1,6 @@
-package ru.jeanponomarev.view;
+package ru.jeanponomarev.temperature.view;
 
-import ru.jeanponomarev.controller.Controller;
+import ru.jeanponomarev.temperature.controller.Controller;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,9 +19,18 @@ public class Window implements View {
 
     private double resultTemperature;
 
+    public Window(Controller controller) {
+        this.controller = controller;
+    }
+
     @Override
     public JTextField getInputTextField() {
         return inputTextField;
+    }
+
+    @Override
+    public double getInputTemperature() throws NumberFormatException {
+        return Double.parseDouble(getInputTextField().getText());
     }
 
     @Override
@@ -30,12 +39,18 @@ public class Window implements View {
     }
 
     @Override
+    public String getLeftScale() {
+        return (String) getComboBoxLeft().getSelectedItem();
+    }
+
+    @Override
     public JComboBox<String> getComboBoxRight() {
         return comboBoxRight;
     }
 
-    public Window(Controller controller) {
-        this.controller = controller;
+    @Override
+    public String getRightScale() {
+        return (String) getComboBoxRight().getSelectedItem();
     }
 
     @Override
@@ -45,13 +60,13 @@ public class Window implements View {
 
     @Override
     public void showResult() {
-        outputTextField.setText(String.valueOf(resultTemperature));
+        outputTextField.setText(String.format("%.2f", resultTemperature));
     }
 
     @Override
     public void showErrorMessage() {
         JOptionPane.showMessageDialog(frame,
-                "Были введены не цифровые данные",
+                "Non-digital data was entered",
                 "Data error",
                 JOptionPane.ERROR_MESSAGE);
     }
@@ -61,6 +76,7 @@ public class Window implements View {
             frame = new JFrame("Temperature converter");
             frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
             frame.setSize(300, 200);
+            frame.setMinimumSize(new Dimension(300, 200));
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);
 
@@ -113,7 +129,7 @@ public class Window implements View {
             constraints.gridy = 2;
             container.add(convertButton, constraints);
 
-            convertButton.addActionListener(e -> controller.processConvertButtonClick());
+            convertButton.addActionListener((e) -> controller.convertTemperature());
         });
     }
 }

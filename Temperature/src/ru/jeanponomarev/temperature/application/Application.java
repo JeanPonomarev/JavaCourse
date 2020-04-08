@@ -1,8 +1,8 @@
-package ru.jeanponomarev.application;
+package ru.jeanponomarev.temperature.application;
 
-import ru.jeanponomarev.controller.Controller;
-import ru.jeanponomarev.model.Model;
-import ru.jeanponomarev.view.Window;
+import ru.jeanponomarev.temperature.controller.Controller;
+import ru.jeanponomarev.temperature.model.Model;
+import ru.jeanponomarev.temperature.view.Window;
 
 public class Application {
     public static void main(String[] args) {
