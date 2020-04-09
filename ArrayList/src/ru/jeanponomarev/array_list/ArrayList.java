@@ -88,6 +88,7 @@ public class ArrayList<T> implements List<T> {
         return Arrays.copyOf(items, size);
     }
 
+    @SuppressWarnings("SuspiciousSystemArraycopy")
     @Override
     public <T1> T1[] toArray(T1[] a) {
         if (a.length < size) {
@@ -95,10 +96,7 @@ public class ArrayList<T> implements List<T> {
             return (T1[]) Arrays.copyOf(items, size, a.getClass());
         }
 
-        for (int i = 0; i < size; i++) {
-            //noinspection unchecked
-            a[i] = (T1) items[i];
-        }
+        System.arraycopy(items, 0, a, 0, size);
 
         if (a.length > size) {
             a[size] = null;
@@ -122,7 +120,7 @@ public class ArrayList<T> implements List<T> {
     }
 
     private void increaseCapacity() {
-        if (size == 0) {
+        if (items.length == 0) {
             items = Arrays.copyOf(items, 10);
         } else {
             items = Arrays.copyOf(items, items.length * 2);
@@ -130,7 +128,7 @@ public class ArrayList<T> implements List<T> {
     }
 
     public void ensureCapacity(int capacity) {
-        if (capacity > size) {
+        if (capacity > items.length) {
             items = Arrays.copyOf(items, capacity);
         }
     }
@@ -170,24 +168,23 @@ public class ArrayList<T> implements List<T> {
 
     @Override
     public boolean addAll(int index, Collection<? extends T> c) {
-        if (index > size || index < 0) {
-            throw new IndexOutOfBoundsException("Индекс лежит за пределами списка");
-        }
+        verifyIndex(index, true);
 
         if (c.isEmpty()) {
             return false;
         }
 
-        if (items.length < size + c.size()) {
-            ensureCapacity(size + c.size());
-        }
+        ensureCapacity(size + c.size());
 
         if (index != size) {
             System.arraycopy(items, index, items, index + c.size(), size - index);
         }
 
-        //noinspection unchecked
-        System.arraycopy(c.toArray((T[]) new Object[]{}), 0, items, index, c.size());
+        int i = index;
+        for (T element : c) {
+            items[i] = element;
+            i++;
+        }
 
         size += c.size();
         ++modCount;
@@ -241,18 +238,14 @@ public class ArrayList<T> implements List<T> {
 
     @Override
     public T get(int index) {
-        if (index >= size || index < 0) {
-            throw new IndexOutOfBoundsException("Индекс лежит за пределами списка");
-        }
+        verifyIndex(index, false);
 
         return items[index];
     }
 
     @Override
     public T set(int index, T element) {
-        if (index >= size || index < 0) {
-            throw new IndexOutOfBoundsException("Индекс лежит за пределами списка");
-        }
+        verifyIndex(index, false);
 
         T replacedItem = items[index];
 
@@ -263,9 +256,7 @@ public class ArrayList<T> implements List<T> {
 
     @Override
     public void add(int index, T element) {
-        if (index > size || index < 0) {
-            throw new IndexOutOfBoundsException("Индекс лежит за пределами списка");
-        }
+        verifyIndex(index, true);
 
         if (size >= items.length) {
             increaseCapacity();
@@ -281,9 +272,7 @@ public class ArrayList<T> implements List<T> {
 
     @Override
     public T remove(int index) {
-        if (index >= size || index < 0) {
-            throw new IndexOutOfBoundsException("Индекс лежит за пределами списка");
-        }
+        verifyIndex(index, false);
 
         T removedItem = get(index);
 
@@ -335,6 +324,22 @@ public class ArrayList<T> implements List<T> {
         stringBuilder.append("]");
 
         return stringBuilder.toString();
+    }
+
+    private void verifyIndex(int index, boolean canBeEqualsToSize) {
+        if (index < 0) {
+            throw new IndexOutOfBoundsException("Индекс " + index + " лежит за пределами границ списка: [0, " + (size - 1) + "]");
+        }
+
+        if (canBeEqualsToSize) {
+            if (index > size) {
+                throw new IndexOutOfBoundsException("Индекс " + index + " лежит за пределами допустимого диапазона вставки: [0, " + size + "]");
+            }
+        } else {
+            if (index >= size) {
+                throw new IndexOutOfBoundsException("Индекс " + index + " лежит за пределами границ списка: [0, " + (size - 1) + "]");
+            }
+        }
     }
 
     @Override
