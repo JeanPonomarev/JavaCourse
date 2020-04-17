@@ -1,12 +1,12 @@
 package ru.jeanponomarev.temperature.view;
 
-import ru.jeanponomarev.temperature.controller.Controller;
+import ru.jeanponomarev.temperature.controller.ControllerDesktop;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class Window implements View {
-    private final Controller controller;
+    private final ControllerDesktop controller;
 
     private JFrame frame;
     private Container container;
@@ -19,38 +19,23 @@ public class Window implements View {
 
     private double resultTemperature;
 
-    public Window(Controller controller) {
+    public Window(ControllerDesktop controller) {
         this.controller = controller;
     }
 
     @Override
-    public JTextField getInputTextField() {
-        return inputTextField;
-    }
-
-    @Override
     public double getInputTemperature() throws NumberFormatException {
-        return Double.parseDouble(getInputTextField().getText());
+        return Double.parseDouble(inputTextField.getText());
     }
 
     @Override
-    public JComboBox<String> getComboBoxLeft() {
-        return comboBoxLeft;
+    public String getInitialScale() {
+        return (String) comboBoxLeft.getSelectedItem();
     }
 
     @Override
-    public String getLeftScale() {
-        return (String) getComboBoxLeft().getSelectedItem();
-    }
-
-    @Override
-    public JComboBox<String> getComboBoxRight() {
-        return comboBoxRight;
-    }
-
-    @Override
-    public String getRightScale() {
-        return (String) getComboBoxRight().getSelectedItem();
+    public String getResultScale() {
+        return (String) comboBoxRight.getSelectedItem();
     }
 
     @Override
@@ -104,7 +89,7 @@ public class Window implements View {
             constraints.insets = new Insets(5, 5, 5, 5);
             container.add(outputTextField, constraints);
 
-            comboBoxLeft = new JComboBox<>(controller.getComboBoxElements());
+            comboBoxLeft = new JComboBox<>(controller.getTemperatureScaleUINames());
             constraints.weightx = 0.5;
             constraints.weighty = 0.2;
             constraints.gridx = 0;
@@ -112,7 +97,7 @@ public class Window implements View {
             constraints.insets = new Insets(5, 5, 5, 5);
             container.add(comboBoxLeft, constraints);
 
-            comboBoxRight = new JComboBox<>(controller.getComboBoxElements());
+            comboBoxRight = new JComboBox<>(controller.getTemperatureScaleUINames());
             constraints.weightx = 0.5;
             constraints.weighty = 0.2;
             constraints.gridx = 1;
