@@ -20,12 +20,15 @@ public class TreeTest {
         tree.add(6.4);
         tree.add(6.45);
 
+        System.out.println("Дерево содержит 6.4: " + tree.contains(6.4));
+
         System.out.println("Обход в ширину");
         tree.conductBreadthTraversal(System.out::println);
 
         System.out.println("Size: " + tree.size());
         System.out.println();
 
+        System.out.println("Удаляем 6");
         tree.remove(6.0);
 
         System.out.println("Обход в глубину");
@@ -34,6 +37,7 @@ public class TreeTest {
         System.out.println("Size: " + tree.size());
         System.out.println();
 
+        System.out.println("Удаляем 6.5");
         tree.remove(8.0);
 
         System.out.println("Обход в глубину через рекурсию");
