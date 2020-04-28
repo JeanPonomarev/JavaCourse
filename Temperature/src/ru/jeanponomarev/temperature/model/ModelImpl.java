@@ -1,14 +1,15 @@
 package ru.jeanponomarev.temperature.model;
 
 import ru.jeanponomarev.temperature.model.temperature_scales.TemperatureScale;
-import ru.jeanponomarev.temperature.model.temperature_scales.TemperatureScaleName;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ModelDesktop extends Model {
-    public ModelDesktop(List<TemperatureScale> temperatureScalesList) {
-        super(temperatureScalesList);
+public class ModelImpl implements Model {
+    private List<TemperatureScale> temperatureScalesList;
+
+    public ModelImpl(List<TemperatureScale> temperatureScalesList) {
+        this.temperatureScalesList = temperatureScalesList;
     }
 
     @Override
@@ -16,20 +17,27 @@ public class ModelDesktop extends Model {
         List<String> temperatureScalesNames = new ArrayList<>();
 
         for (TemperatureScale temperatureScale : temperatureScalesList) {
-            temperatureScalesNames.add(temperatureScale.getTemperatureScaleName().getUserInterfaceScaleName());
+            temperatureScalesNames.add(getTemperatureScaleName(temperatureScale));
         }
 
         return temperatureScalesNames;
     }
 
+    private String getTemperatureScaleName(TemperatureScale temperatureScale) {
+        String fullClassName = temperatureScale.getClass().getName();
+        String[] fullClassNameParts = fullClassName.split("\\.");
+
+        return fullClassNameParts[fullClassNameParts.length - 1].replace("Scale", "");
+    }
+
     @Override
-    public double convertTemperature(double inputTemperature, TemperatureScaleName fromScaleEnum, TemperatureScaleName toScaleEnum) {
+    public double convertTemperature(double inputTemperature, String initialScaleName, String resultScaleName) {
         double resultTemperature = 0;
 
         for (TemperatureScale temperatureScaleFrom : temperatureScalesList) {
-            if (temperatureScaleFrom.getTemperatureScaleName().equals(fromScaleEnum)) {
+            if (getTemperatureScaleName(temperatureScaleFrom).equals(initialScaleName)) {
                 for (TemperatureScale temperatureScaleTo : temperatureScalesList) {
-                    if (temperatureScaleTo.getTemperatureScaleName().equals(toScaleEnum)) {
+                    if (getTemperatureScaleName(temperatureScaleTo).equals(resultScaleName)) {
                         resultTemperature = temperatureScaleFrom.convertTemperature(temperatureScaleTo, inputTemperature);
                         break;
                     }

@@ -2,11 +2,6 @@ package ru.jeanponomarev.temperature.model.temperature_scales;
 
 public class FahrenheitScale implements TemperatureScale {
     @Override
-    public TemperatureScaleName getTemperatureScaleName() {
-        return TemperatureScaleName.FAHRENHEIT;
-    }
-
-    @Override
     public double convertThisScaleToCelsius(double inputTemperature) {
         return (inputTemperature - 32) * 5.0 / 9;
     }

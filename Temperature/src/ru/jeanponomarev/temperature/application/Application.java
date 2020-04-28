@@ -1,9 +1,10 @@
 package ru.jeanponomarev.temperature.application;
 
-import ru.jeanponomarev.temperature.controller.ControllerDesktop;
+import ru.jeanponomarev.temperature.controller.ControllerImpl;
 import ru.jeanponomarev.temperature.model.Model;
-import ru.jeanponomarev.temperature.model.ModelDesktop;
+import ru.jeanponomarev.temperature.model.ModelImpl;
 import ru.jeanponomarev.temperature.model.temperature_scales.*;
+import ru.jeanponomarev.temperature.view.View;
 import ru.jeanponomarev.temperature.view.Window;
 
 import java.util.Arrays;
@@ -18,9 +19,9 @@ public class Application {
                 new ReaumurScale()
         );
 
-        Model model = new ModelDesktop(temperatureScales);
-        ControllerDesktop controller = new ControllerDesktop(model);
-        Window window = new Window(controller);
+        Model model = new ModelImpl(temperatureScales);
+        ControllerImpl controller = new ControllerImpl(model);
+        View window = new Window(controller);
         controller.setView(window);
         window.run();
     }

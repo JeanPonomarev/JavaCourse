@@ -1,25 +1,25 @@
 package ru.jeanponomarev.temperature.view;
 
-import ru.jeanponomarev.temperature.controller.ControllerDesktop;
+import ru.jeanponomarev.temperature.controller.ControllerImpl;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class Window implements View {
-    private final ControllerDesktop controller;
+    private final ControllerImpl controller;
 
     private JFrame frame;
     private Container container;
     private GridBagConstraints constraints;
     private JTextField inputTextField;
     private JTextField outputTextField;
-    private JComboBox<String> comboBoxLeft;
-    private JComboBox<String> comboBoxRight;
+    private JComboBox<String> initialScales;
+    private JComboBox<String> resultScales;
     private JButton convertButton;
 
     private double resultTemperature;
 
-    public Window(ControllerDesktop controller) {
+    public Window(ControllerImpl controller) {
         this.controller = controller;
     }
 
@@ -30,12 +30,12 @@ public class Window implements View {
 
     @Override
     public String getInitialScale() {
-        return (String) comboBoxLeft.getSelectedItem();
+        return (String) initialScales.getSelectedItem();
     }
 
     @Override
     public String getResultScale() {
-        return (String) comboBoxRight.getSelectedItem();
+        return (String) resultScales.getSelectedItem();
     }
 
     @Override
@@ -56,6 +56,7 @@ public class Window implements View {
                 JOptionPane.ERROR_MESSAGE);
     }
 
+    @Override
     public void run() {
         SwingUtilities.invokeLater(() -> {
             frame = new JFrame("Temperature converter");
@@ -89,21 +90,21 @@ public class Window implements View {
             constraints.insets = new Insets(5, 5, 5, 5);
             container.add(outputTextField, constraints);
 
-            comboBoxLeft = new JComboBox<>(controller.getTemperatureScaleUINames());
+            initialScales = new JComboBox<>(controller.getTemperatureScaleUINames());
             constraints.weightx = 0.5;
             constraints.weighty = 0.2;
             constraints.gridx = 0;
             constraints.gridy = 1;
             constraints.insets = new Insets(5, 5, 5, 5);
-            container.add(comboBoxLeft, constraints);
+            container.add(initialScales, constraints);
 
-            comboBoxRight = new JComboBox<>(controller.getTemperatureScaleUINames());
+            resultScales = new JComboBox<>(controller.getTemperatureScaleUINames());
             constraints.weightx = 0.5;
             constraints.weighty = 0.2;
             constraints.gridx = 1;
             constraints.gridy = 1;
             constraints.insets = new Insets(5, 5, 5, 5);
-            container.add(comboBoxRight, constraints);
+            container.add(resultScales, constraints);
 
             convertButton = new JButton("Convert");
             constraints.weightx = 0.5;
@@ -114,7 +115,17 @@ public class Window implements View {
             constraints.gridy = 2;
             container.add(convertButton, constraints);
 
-            convertButton.addActionListener((e) -> controller.convertTemperature());
+            convertButton.addActionListener((e) -> {
+                double inputTemperature;
+                try {
+                    inputTemperature = getInputTemperature();
+                } catch (NumberFormatException exception) {
+                    showErrorMessage();
+                    return;
+                }
+
+                controller.convertTemperature(inputTemperature);
+            });
         });
     }
 }

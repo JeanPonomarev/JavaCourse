@@ -5,6 +5,8 @@ public interface View {
 
     void showErrorMessage();
 
+    void run();
+
     double getInputTemperature();
 
     String getInitialScale();
