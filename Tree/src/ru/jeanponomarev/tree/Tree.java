@@ -6,10 +6,10 @@ import java.util.function.Consumer;
 public class Tree<T> {
     private TreeNode<T> root;
     private int size;
-    private final Comparator<? super T> comparator;
+    private Comparator<? super T> comparator;
 
     public Tree() {
-        this.comparator = null;
+
     }
 
     public Tree(Comparator<? super T> comparator) {
@@ -19,6 +19,18 @@ public class Tree<T> {
     @SuppressWarnings("unchecked")
     private int compare(Object node1, Object node2) {
         if (comparator == null) {
+            if (node1 == null) {
+                if (node2 == null) {
+                    return 0;
+                }
+
+                return -1;
+            }
+
+            if (node2 == null) {
+                return 1;
+            }
+
             return ((Comparable<? super T>) node1).compareTo((T) node2);
         }
 
@@ -56,29 +68,7 @@ public class Tree<T> {
     }
 
     public boolean contains(T data) {
-        TreeNode<T> currentNode = root;
-
-        while (true) {
-            int comparisonResult = compare(data, currentNode.getData());
-
-            if (comparisonResult == 0) {
-                return true;
-            }
-
-            if (comparisonResult < 0) {
-                if (currentNode.getLeftChild() != null) {
-                    currentNode = currentNode.getLeftChild();
-                } else {
-                    return false;
-                }
-            } else {
-                if (currentNode.getRightChild() != null) {
-                    currentNode = currentNode.getRightChild();
-                } else {
-                    return false;
-                }
-            }
-        }
+        return findChildAndParent(data) != null;
     }
 
     public boolean remove(T data) {
@@ -111,13 +101,17 @@ public class Tree<T> {
         } else if (childNode.getLeftChild() == null || childNode.getRightChild() == null) {
             removeOneChildNode(parentNode, childNode);
         } else {
-            TreeNode<T>[] minNodeAndParent = findMinNodeAndParent(childNode.getRightChild(), parentNode);
+            TreeNode<T>[] minNodeAndParent = findMinNodeAndParent(childNode.getRightChild(), childNode);
 
             TreeNode<T> minChildNode = minNodeAndParent[0];
             TreeNode<T> minParentNode = minNodeAndParent[1];
 
             if (minChildNode.getRightChild() != null) {
-                minParentNode.setLeftChild(minChildNode.getRightChild());
+                if (childNode != minParentNode) {
+                    minParentNode.setLeftChild(minChildNode.getRightChild());
+                } else {
+                    minParentNode.setRightChild(minChildNode.getRightChild());
+                }
             } else {
                 minParentNode.setLeftChild(null);
             }
