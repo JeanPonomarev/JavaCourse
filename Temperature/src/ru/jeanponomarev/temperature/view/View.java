@@ -1,5 +1,7 @@
 package ru.jeanponomarev.temperature.view;
 
+import ru.jeanponomarev.temperature.model.temperature_scales.TemperatureScale;
+
 public interface View {
     void showResult();
 
@@ -9,9 +11,9 @@ public interface View {
 
     double getInputTemperature();
 
-    String getInitialScale();
+    TemperatureScale getInitialScale();
 
-    String getResultScale();
+    TemperatureScale getResultScale();
 
     void setResultTemperature(double resultTemperature);
 }

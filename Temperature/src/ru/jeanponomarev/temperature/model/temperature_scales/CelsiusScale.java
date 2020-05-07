@@ -10,4 +10,9 @@ public class CelsiusScale implements TemperatureScale {
     public double convertCelsiusToThisScale(double transitionTemperature) {
         return transitionTemperature;
     }
+
+    @Override
+    public String toString() {
+        return "Celsius";
+    }
 }

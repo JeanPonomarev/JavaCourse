@@ -10,4 +10,9 @@ public class KelvinScale implements TemperatureScale {
     public double convertCelsiusToThisScale(double transitionTemperature) {
         return transitionTemperature + 273.15;
     }
+
+    @Override
+    public String toString() {
+        return "Kelvin";
+    }
 }

@@ -1,9 +1,11 @@
 package ru.jeanponomarev.temperature.model;
 
+import ru.jeanponomarev.temperature.model.temperature_scales.TemperatureScale;
+
 import java.util.List;
 
 public interface Model {
-    List<String> getTemperatureScaleUINames();
+    List<TemperatureScale> getTemperatureScales();
 
-    double convertTemperature(double inputTemperature, String fromScaleName, String toScaleName);
+    double convertTemperature(double inputTemperature, TemperatureScale fromScaleName, TemperatureScale toScaleName);
 }

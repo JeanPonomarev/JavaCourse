@@ -10,4 +10,9 @@ public class ReaumurScale implements TemperatureScale {
     public double convertCelsiusToThisScale(double transitionTemperature) {
         return transitionTemperature * 0.8;
     }
+
+    @Override
+    public String toString() {
+        return "Reamur";
+    }
 }

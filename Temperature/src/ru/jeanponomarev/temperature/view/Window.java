@@ -1,25 +1,26 @@
 package ru.jeanponomarev.temperature.view;
 
-import ru.jeanponomarev.temperature.controller.ControllerImpl;
+import ru.jeanponomarev.temperature.controller.Controller;
+import ru.jeanponomarev.temperature.model.temperature_scales.TemperatureScale;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class Window implements View {
-    private final ControllerImpl controller;
+    private final Controller controller;
 
     private JFrame frame;
     private Container container;
     private GridBagConstraints constraints;
     private JTextField inputTextField;
     private JTextField outputTextField;
-    private JComboBox<String> initialScales;
-    private JComboBox<String> resultScales;
+    private JComboBox<TemperatureScale> initialScales;
+    private JComboBox<TemperatureScale> resultScales;
     private JButton convertButton;
 
     private double resultTemperature;
 
-    public Window(ControllerImpl controller) {
+    public Window(Controller controller) {
         this.controller = controller;
     }
 
@@ -29,13 +30,13 @@ public class Window implements View {
     }
 
     @Override
-    public String getInitialScale() {
-        return (String) initialScales.getSelectedItem();
+    public TemperatureScale getInitialScale() {
+        return (TemperatureScale) initialScales.getSelectedItem();
     }
 
     @Override
-    public String getResultScale() {
-        return (String) resultScales.getSelectedItem();
+    public TemperatureScale getResultScale() {
+        return (TemperatureScale) resultScales.getSelectedItem();
     }
 
     @Override
@@ -90,7 +91,7 @@ public class Window implements View {
             constraints.insets = new Insets(5, 5, 5, 5);
             container.add(outputTextField, constraints);
 
-            initialScales = new JComboBox<>(controller.getTemperatureScaleUINames());
+            initialScales = new JComboBox<>(controller.getTemperatureScales());
             constraints.weightx = 0.5;
             constraints.weighty = 0.2;
             constraints.gridx = 0;
@@ -98,7 +99,7 @@ public class Window implements View {
             constraints.insets = new Insets(5, 5, 5, 5);
             container.add(initialScales, constraints);
 
-            resultScales = new JComboBox<>(controller.getTemperatureScaleUINames());
+            resultScales = new JComboBox<>(controller.getTemperatureScales());
             constraints.weightx = 0.5;
             constraints.weighty = 0.2;
             constraints.gridx = 1;
