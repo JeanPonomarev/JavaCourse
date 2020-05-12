@@ -173,6 +173,11 @@ public class Tree<T> {
     }
 
     private void removeLeaf(TreeNode<T> parentNode, TreeNode<T> childNode) {
+        if (childNode == root) {
+            root = null;
+            return;
+        }
+
         if (parentNode.getLeftChild() == childNode) {
             parentNode.setLeftChild(null);
         } else {
@@ -182,16 +187,24 @@ public class Tree<T> {
 
     private void removeOneChildNode(TreeNode<T> parentNode, TreeNode<T> childNode) {
         if (childNode.getLeftChild() != null) {
-            if (parentNode.getRightChild() == childNode) {
-                parentNode.setRightChild(childNode.getLeftChild());
+            if (parentNode != null) {
+                if (parentNode.getRightChild() == childNode) {
+                    parentNode.setRightChild(childNode.getLeftChild());
+                } else {
+                    parentNode.setLeftChild(childNode.getLeftChild());
+                }
             } else {
-                parentNode.setLeftChild(childNode.getLeftChild());
+                root = childNode.getLeftChild();
             }
         } else {
-            if (parentNode.getRightChild() == childNode) {
-                parentNode.setRightChild(childNode.getRightChild());
+            if (parentNode != null) {
+                if (parentNode.getRightChild() == childNode) {
+                    parentNode.setRightChild(childNode.getRightChild());
+                } else {
+                    parentNode.setLeftChild(childNode.getRightChild());
+                }
             } else {
-                parentNode.setLeftChild(childNode.getRightChild());
+                root = childNode.getRightChild();
             }
         }
     }

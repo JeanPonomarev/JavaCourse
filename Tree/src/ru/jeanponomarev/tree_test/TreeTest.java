@@ -60,8 +60,8 @@ public class TreeTest {
         System.out.println("Integer tree:");
         System.out.println();
 
-        System.out.println("Удаляем 3");
-        integerTree.remove(3);
+        System.out.println("Удаляем 1");
+        integerTree.remove(1);
 
         System.out.println("Обход в ширину");
         integerTree.conductBreadthTraversal(System.out::println);
