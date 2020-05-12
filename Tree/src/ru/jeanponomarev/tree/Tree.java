@@ -81,21 +81,6 @@ public class Tree<T> {
         TreeNode<T> childNode = childNodeAndParent[0];
         TreeNode<T> parentNode = childNodeAndParent[1];
 
-        if (childNode == root && parentNode == null) {
-            if (size == 1) {
-                root = null;
-                --size;
-                return true;
-            }
-
-            TreeNode<T> newRoot = childNode.getRightChild();
-            newRoot.setLeftChild(childNode.getLeftChild());
-
-            root = newRoot;
-            --size;
-            return true;
-        }
-
         if (childNode.getLeftChild() == null & childNode.getRightChild() == null) {
             removeLeaf(parentNode, childNode);
         } else if (childNode.getLeftChild() == null || childNode.getRightChild() == null) {
@@ -116,10 +101,14 @@ public class Tree<T> {
                 minParentNode.setLeftChild(null);
             }
 
-            if (parentNode.getRightChild() == childNode) {
-                parentNode.setRightChild(minChildNode);
+            if (parentNode != null) {
+                if (parentNode.getRightChild() == childNode) {
+                    parentNode.setRightChild(minChildNode);
+                } else {
+                    parentNode.setLeftChild(minChildNode);
+                }
             } else {
-                parentNode.setLeftChild(minChildNode);
+                root = minChildNode;
             }
 
             if (minChildNode != childNode.getLeftChild()) {
@@ -133,6 +122,7 @@ public class Tree<T> {
             } else {
                 minChildNode.setRightChild(null);
             }
+
         }
 
         --size;

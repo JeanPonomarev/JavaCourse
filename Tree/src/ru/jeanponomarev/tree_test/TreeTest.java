@@ -40,7 +40,7 @@ public class TreeTest {
         System.out.println("Size: " + doubleTree.size());
         System.out.println();
 
-        System.out.println("Удаляем 6.5");
+        System.out.println("Удаляем 8.0");
         doubleTree.remove(8.0);
 
         System.out.println("Обход в глубину через рекурсию");
