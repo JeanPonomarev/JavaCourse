@@ -5,7 +5,7 @@ import ru.jeanponomarev.tree.Tree;
 public class TreeTest {
     public static void main(String[] args) {
         Tree<Double> doubleTree = new Tree<>();
-
+        
         doubleTree.add(8.0);
         doubleTree.add(3.0);
         doubleTree.add(10.0);

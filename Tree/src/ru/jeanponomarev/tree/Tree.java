@@ -98,7 +98,9 @@ public class Tree<T> {
                     minParentNode.setRightChild(minChildNode.getRightChild());
                 }
             } else {
-                minParentNode.setLeftChild(null);
+                if (childNode != minParentNode) {
+                    minParentNode.setLeftChild(null);
+                }
             }
 
             if (parentNode != null) {
