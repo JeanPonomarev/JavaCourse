@@ -15,7 +15,6 @@ public class Tree<T> {
         this.comparator = comparator;
     }
 
-
     private int compare(T node1, T node2) {
         if (comparator == null) {
             if (node1 == null) {
