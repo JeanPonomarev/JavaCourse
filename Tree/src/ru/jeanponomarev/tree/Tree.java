@@ -9,15 +9,14 @@ public class Tree<T> {
     private Comparator<? super T> comparator;
 
     public Tree() {
-
     }
 
     public Tree(Comparator<? super T> comparator) {
         this.comparator = comparator;
     }
 
-    @SuppressWarnings("unchecked")
-    private int compare(Object node1, Object node2) {
+
+    private int compare(T node1, T node2) {
         if (comparator == null) {
             if (node1 == null) {
                 if (node2 == null) {
@@ -31,10 +30,11 @@ public class Tree<T> {
                 return 1;
             }
 
-            return ((Comparable<? super T>) node1).compareTo((T) node2);
+            //noinspection unchecked
+            return ((Comparable<? super T>) node1).compareTo(node2);
         }
 
-        return comparator.compare((T) node1, (T) node2);
+        return comparator.compare(node1, node2);
     }
 
     public void add(T data) {
